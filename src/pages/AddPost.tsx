@@ -12,6 +12,7 @@ import {
 } from "@ionic/react";
 import {useCamera} from "@capacitor-community/react-hooks/camera";
 import {CameraResultType} from "@capacitor/core";
+import {storage} from "../utils/nhost";
 
 const AddPost = () => {
 
@@ -25,6 +26,13 @@ const AddPost = () => {
             correctOrientation: true,
             promptLabelHeader: "Test"
         });
+    };
+
+    const uploadImage = async () => {
+      await storage.putString(`/public/testImage.jpeg`, photo?.dataUrl as string,
+          "data_url", null, (pe: ProgressEvent) => {
+            console.log(pe.loaded)
+          })
     };
 
     return (
@@ -41,6 +49,7 @@ const AddPost = () => {
                 <IonCard>
                     <img alt="PWA" src={photo?.dataUrl}/>
                     <IonButton onClick={triggerCamera}>Take picture</IonButton>
+                    <IonButton onClick={uploadImage}>Take picture</IonButton>
                 </IonCard>
             </IonContent>
         </IonPage>
