@@ -39,6 +39,7 @@ const AddPost = () => {
             </IonHeader>
             <IonContent>
                 <IonCard>
+                    <img alt="PWA" src={photo?.dataUrl}/>
                     <IonButton onClick={triggerCamera}>Take picture</IonButton>
                 </IonCard>
             </IonContent>
