@@ -52,7 +52,7 @@ const DetailView = (props: any) => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonButtons slot="start">
+                    <IonButtons slot="primary">
                         <IonBackButton/>
                     </IonButtons>
                     <IonTitle>Detail view</IonTitle>
