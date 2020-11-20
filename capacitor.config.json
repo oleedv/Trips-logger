@@ -4,7 +4,7 @@
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
-  "windowsAndroidStudioPath":  "C:\\Users\\Ole desktop\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\201.6953283\\binstudio64.exe"
+  "windowsAndroidStudioPath": "C:\\Users\\Ole desktop\\AppData\\Local\\JetBrains\\Toolbox\\apps\\AndroidStudio\\ch-0\\201.6953283\\bin\\studio64.exe",
 
   "plugins": {
     "SplashScreen": {

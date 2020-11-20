@@ -22,18 +22,17 @@ const AddPost = () => {
         await getPhoto({
             resultType: CameraResultType.DataUrl,
             allowEditing: false,
-            quality: 100,
-            correctOrientation: true,
-            promptLabelHeader: "Test"
+            quality: 20,
         });
     };
 
     const uploadImage = async () => {
-      await storage.putString(`/public/testImage.jpeg`, photo?.dataUrl as string,
-          "data_url", null, (pe: ProgressEvent) => {
+        await storage.putString(`/public/testbilde.jpeg`,
+            (photo?.dataUrl as string), "data_url",
+            null, (pe: ProgressEvent) => {
             console.log(pe.loaded)
-          })
-    };
+        });
+    }
 
     return (
         <IonPage>
@@ -47,7 +46,7 @@ const AddPost = () => {
             </IonHeader>
             <IonContent>
                 <IonCard>
-                    <img alt="PWA" src={photo?.dataUrl}/>
+                    <img alt="No photo" src={photo?.dataUrl}/>
                     <IonButton onClick={triggerCamera}>Take picture</IonButton>
                     <IonButton onClick={uploadImage}>Upload picture</IonButton>
                 </IonCard>
