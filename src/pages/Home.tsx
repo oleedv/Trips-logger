@@ -20,6 +20,8 @@ query MyQuery {
     id
     title
     description
+    image_filename
+    created_date
     user {display_name}
   }
 }

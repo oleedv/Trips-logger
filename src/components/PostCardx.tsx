@@ -1,12 +1,12 @@
 import React from 'react';
-import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle} from "@ionic/react";
+import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonFooter} from "@ionic/react";
 import IPost from "../models/IPost";
 
-const PostCard = ({description, id, title, user}: IPost) => {
+const PostCard = ({description, id, title, user, created_date, image_filename}: IPost) => {
     return (
         <IonCard>
             <img alt="Placeholder"
-                 src={"https://images.unsplash.com/photo-1605616008746-5e6cc857a72a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"}/>
+                 src={`https://backend-ytb9qog2.nhost.app/storage/o/public/${image_filename}`}/>
             <IonCardHeader>
                 <IonCardSubtitle>
                     @ {user.display_name} &bull; ? likes // todo likes!
@@ -18,6 +18,11 @@ const PostCard = ({description, id, title, user}: IPost) => {
             <IonCardContent>
                 {description}
             </IonCardContent>
+            <IonFooter>
+                <IonCardSubtitle>
+                   Uploaded at {created_date}
+                </IonCardSubtitle>
+            </IonFooter>
         </IonCard>
     )
 };
