@@ -1,7 +1,7 @@
 import nhost from "nhost-js-sdk";
 
 const config = {
-    base_url: "\thttps://backend-ytb9qog2.nhost.app",
+    base_url: "https://backend-ytb9qog2.nhost.app",
 };
 
 nhost.initializeApp(config);
