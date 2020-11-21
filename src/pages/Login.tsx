@@ -20,6 +20,8 @@ import PageTitle from "../components/styled/PageTitle";
 import LoginCard from "../components/styled/LoginCard";
 import LoginBtn from "../components/styled/LoginBtn";
 import styled from "styled-components";
+import {Formik} from "formik";
+import * as Yup from "yup";
 
 const loginBackgroundString = encodeURIComponent(renderToStaticMarkup(<LoginBackground/>))
 
@@ -29,8 +31,6 @@ const Login = () => {
     const [password, setPassword] = useState<string>("");
     //Check if user is trying to login or not
     const [isAuth, setIsAuth] = useState<boolean>(false);
-    //for checking if username or password is incorrect, show toast
-    const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
 
     const authUser = async () => {
         setIsAuth(true)
@@ -41,7 +41,6 @@ const Login = () => {
         } catch (e) {
             console.log(e) //Sends errors to object in console, todo add better feedback
             setIsAuth(false)
-            setShowErrorToast(true)
         }
     }
 // todo forelesning 7 35:18
@@ -51,37 +50,77 @@ const Login = () => {
         }
     });
 
+    let validationSchema = Yup.object().shape({
+        email: Yup.string()
+            .email("Must be a valid email address")
+            .max(255, "Must be shorter than 255 chars")
+            .required("Must enter a email"),
+        password: Yup.string()
+            .min(6, "Too short")
+            .max(255, "Must be shorter than 255 chars")
+            .required("Must enter a password")
+    })
+
     return (
         <IonPage>
             <IonContentStyled>
                 <CenterContainer>
                     <PageTitle>Trip logger</PageTitle>
                     <LoginCard>
-                        <IonList>
-                            <IonItem>
-                                <IonInput placeholder="Email"
-                                          onIonInput={(e: any) => setEmailAddress(e.target.value)}/>
-                            </IonItem>
-                            <IonItem>
-                                <IonInput placeholder="Password" type="password"
-                                          onIonInput={(e: any) => setPassword(e.target.value)}/>
-                            </IonItem>
-                        </IonList>
+                        <div>
+                            <h1>Login</h1>
+                            <Formik
+                                initialValues={{ email: '', password: '' }}
+                                validationSchema={validationSchema}
+                                onSubmit={(values, { setSubmitting }) => {
+                                    setTimeout(() => {
+                                        alert(JSON.stringify(values, null, 2));
+                                        setSubmitting(false);
+                                    }, 400);
+                                }}
+                            >
+                                {({
+                                      values,
+                                      errors,
+                                      touched,
+                                      handleChange,
+                                      handleBlur,
+                                      handleSubmit,
+                                      isSubmitting,
+                                  }) => (
+                                    <form onSubmit={handleSubmit}>
+                                        <IonInput
+                                            type="email"
+                                            name="email"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.email}
+                                            placeholder="Email"
+                                            onIonInput={(e: any) => setEmailAddress(e.target.value)}
+                                        />
+                                        {errors.email && touched.email && errors.email}
+                                        <IonInput
+                                            type="password"
+                                            name="password"
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            value={values.password}
+                                            placeholder="Password"
+                                            onIonInput={(e: any) => setPassword(e.target.value)}
+                                        />
+                                        {errors.password && touched.password && errors.password}
+                                        <LoginBtn type="submit" disabled={isSubmitting} onClick={authUser}>
+                                            {
+                                                //if authing then show spinner if not show icon
+                                                isAuth ? <IonSpinner name="crescent"/> : <IonIcon icon={arrowForwardCircle}/>
+                                            }
+                                        </LoginBtn>
+                                    </form>
+                                )}
+                            </Formik>
+                        </div>
                     </LoginCard>
-                    <LoginBtn onClick={authUser}>
-                        {
-                            //if authing then show spinner if not show icon
-                            isAuth ? <IonSpinner name="crescent"/> : <IonIcon icon={arrowForwardCircle}/>
-                        }
-                    </LoginBtn>
-                </CenterContainer>
-                <IonToast
-                    isOpen={showErrorToast}
-                    onDidDismiss={() => setShowErrorToast(false)}
-                    message="Wrong username or password."
-                    duration={2000}
-                    color="warning"
-                />
+                </CenterContainer>*/}
             </IonContentStyled>
         </IonPage>
     )

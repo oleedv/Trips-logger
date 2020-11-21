@@ -63,9 +63,9 @@ const Feed = () => {
                     <Menu/>
 
                     <IonTitle slot="primary">Trips app</IonTitle>
-                    {/*<IonButtons onClick={logout}>*/}
-                    {/*    <IonIcon icon={exitOutline}/>*/}
-                    {/*</IonButtons>*/}
+                    <IonButtons onClick={logout}>
+                        <IonIcon icon={exitOutline}/>
+                    </IonButtons>
                     <IonButtons slot="end">
                         <IonButton routerLink="/newtrip">
                             Add trip
