@@ -10,7 +10,7 @@ import {
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonBackButton, IonFooter, IonInput, IonItemDivider, IonTextarea, IonButton
+    IonBackButton, IonFooter, IonInput, IonItemDivider, IonTextarea, IonButton, IonAvatar
 } from "@ionic/react";
 import PostCard from "../components/PostCardx";
 import IPost from "../models/IPost";
@@ -20,6 +20,7 @@ import ICommentList from "../models/ICommentList";
 import LoginCard from "../components/styled/LoginCard";
 import styled from "styled-components";
 import {auth} from "../utils/nhost";
+import IonChipStyled from "../components/styled/IonChipStyled";
 
 const GET_COMMENTS = gql`
  query getCommentsByPostID($post_id: Int!) {
@@ -85,7 +86,7 @@ const DetailView = (props: any) => {
             <IonHeader>
                 <IonToolbar>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/home"/>
+                        <IonBackButton defaultHref="/feed"/>
                     </IonButtons>
                     <IonTitle>Detail view</IonTitle>
                 </IonToolbar>
@@ -98,7 +99,12 @@ const DetailView = (props: any) => {
                             data?.posts_by_pk.comments?.map((comment, i) => (
                                 <IonItem key={i}>
                                     <IonLabel>
-                                        <h2>{comment.user.display_name}</h2>
+                                        <IonItem>
+                                            <IonAvatar>
+                                                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                                            </IonAvatar>
+                                            <h2>{comment.user.display_name}</h2>
+                                        </IonItem>
                                         <p>{comment.text}</p>
                                     </IonLabel>
                                 </IonItem>

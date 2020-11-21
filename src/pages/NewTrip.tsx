@@ -3,14 +3,16 @@ import {
     IonBackButton,
     IonButton,
     IonButtons,
-    IonCard,
     IonContent,
-    IonHeader, IonInput,
-    IonPage, IonTextarea,
+    IonHeader,
+    IonInput,
+    IonPage,
+    IonTextarea,
     IonTitle,
     IonToolbar,
     IonProgressBar,
-    IonLabel, IonToast
+    IonLabel,
+    IonToast
 } from "@ionic/react";
 import {useCamera} from "@capacitor-community/react-hooks/camera";
 import {CameraResultType} from "@capacitor/core";
@@ -50,8 +52,7 @@ const useImageUpload = () => {
 };
 
 
-const AddPost = () => {
-
+const NewTrip = () => {
     const {photo, getPhoto} = useCamera();
     const [insertPostMutation] = useMutation(INSERT_POST);
     const [title, setTitle] = useState<string>("")
@@ -93,9 +94,14 @@ const AddPost = () => {
         } catch (e) {
             console.warn(e)
         }
+        //after everything is sent
         setsubmittedCheck(true)
     }
 
+    if(submittedCheck) {
+        window.location.href="/feed"
+        //history.replace wouldnt work, had to use JS method, does cut the toast. todo fix
+    }
 
     return (
         <IonPage>
@@ -103,7 +109,7 @@ const AddPost = () => {
                 <IonToolbar>
                     <IonTitle>Add post</IonTitle>
                     <IonButtons slot="start">
-                        <IonBackButton defaultHref="/home"/>
+                        <IonBackButton defaultHref="/feed"/>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
@@ -116,7 +122,7 @@ const AddPost = () => {
                     <IonLabel>Description</IonLabel>
                     <IonTextareaStyled onIonInput={(e: any) => {setDesc(e.target.value)}}/>
                     <IonButton onClick={triggerCamera}>Photo</IonButton>
-                    <IonButton onClick={InsertPost}>Submit</IonButton>
+                    <IonButton type="submit" onClick={InsertPost}>Submit</IonButton>
 
                 </LoginCard>
                 <IonToast
@@ -135,4 +141,4 @@ const IonTextareaStyled = styled(IonTextarea)`
     height: 100px;
 `;
 
-export default AddPost;
+export default NewTrip;

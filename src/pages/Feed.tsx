@@ -5,7 +5,9 @@ import {
     IonTitle,
     IonToolbar,
     IonButton,
-    IonButtons, IonLabel, IonBackButton, IonIcon, useIonViewWillEnter
+    IonButtons,
+    IonLabel,
+    IonIcon
 } from '@ionic/react';
 import React from 'react';
 import {Link, useHistory} from "react-router-dom";
@@ -15,9 +17,10 @@ import {useQuery} from "@apollo/client";
 import IPostList from "../models/IPostList";
 import {exitOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
+import Menu from "../components/Menu";
 
 const GET_POSTS = gql`
-query MyQuery {
+query {
   posts {
     id
     title
@@ -30,7 +33,7 @@ query MyQuery {
 `;
 
 
-const Home = () => {
+const Feed = () => {
     let history = useHistory();
     const {loading, data} = useQuery<IPostList>(GET_POSTS);
     if (loading) {
@@ -51,16 +54,21 @@ const Home = () => {
 
 
     return (
+
+
+
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Trips app</IonTitle>
-                    <IonButtons onClick={logout}>
-                        <IonIcon icon={exitOutline}/>
-                    </IonButtons>
+                    <Menu/>
+
+                    <IonTitle slot="primary">Trips app</IonTitle>
+                    {/*<IonButtons onClick={logout}>*/}
+                    {/*    <IonIcon icon={exitOutline}/>*/}
+                    {/*</IonButtons>*/}
                     <IonButtons slot="end">
-                        <IonButton routerLink="/addpost">
-                            New post
+                        <IonButton routerLink="/newtrip">
+                            Add trip
                         </IonButton>
                     </IonButtons>
                 </IonToolbar>
@@ -81,4 +89,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Feed;

@@ -1,13 +1,14 @@
 import React, {useState} from "react";
 import {
-    IonHeader,
     IonInput,
     IonItem,
     IonList,
     IonPage,
-    IonTitle,
-    IonToolbar,
-    useIonViewWillEnter, IonIcon, IonSpinner, IonToast, IonContent
+    useIonViewWillEnter,
+    IonIcon,
+    IonSpinner,
+    IonToast,
+    IonContent
 } from "@ionic/react";
 import {auth} from "../utils/nhost";
 import {useHistory} from "react-router-dom";
@@ -23,7 +24,6 @@ import styled from "styled-components";
 const loginBackgroundString = encodeURIComponent(renderToStaticMarkup(<LoginBackground/>))
 
 const Login = () => {
-    console.log(loginBackgroundString)
     let history = useHistory();
     const [emailAddress, setEmailAddress] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -37,7 +37,7 @@ const Login = () => {
         try {
             await auth.login(emailAddress, password);
             setIsAuth(false)
-            history.replace("/home")
+            history.replace("/feed")
         } catch (e) {
             console.log(e) //Sends errors to object in console, todo add better feedback
             setIsAuth(false)
@@ -47,7 +47,7 @@ const Login = () => {
 // todo forelesning 7 35:18
     useIonViewWillEnter(() => {
         if (auth.isAuthenticated()) {
-            history.replace("/home")
+            history.replace("/feed")
         }
     });
 

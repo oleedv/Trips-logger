@@ -3,17 +3,18 @@ import {
     IonAvatar,
     IonCard,
     IonCardContent,
-    IonCardHeader,
     IonCardSubtitle,
-    IonCardTitle, IonChip, IonContent,
-    IonFooter, IonItem, IonNote
+    IonCardTitle,
+    IonNote
 } from "@ionic/react";
 import IPost from "../models/IPost";
-import styled from "styled-components";
+import IonChipStyled from "./styled/IonChipStyled";
+import {Link} from "react-router-dom";
 
-const PostCard = ({description, id, title, user, created_date, image_filename}: IPost) => {
+const PostCard = ({description, title, user, created_date, image_filename}: IPost) => {
     return (
         <IonCard>
+            <Link style={{textDecoration: "none"}} to={{pathname: `/profile`}}>
                 <IonChipStyled>
                 <IonAvatar>
                     <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
@@ -22,6 +23,7 @@ const PostCard = ({description, id, title, user, created_date, image_filename}: 
                     @ {user.display_name}
                 </IonCardSubtitle>
                 </IonChipStyled>
+                </Link>
             <img src={`https://backend-ytb9qog2.nhost.app/storage/o/public/${image_filename}`}/>
             <IonCardContent>
                     <IonCardSubtitle>
@@ -35,11 +37,5 @@ const PostCard = ({description, id, title, user, created_date, image_filename}: 
         </IonCard>
     )
 };
-
-const IonChipStyled = styled(IonChip)`
-    background-color: transparent;
-`;
-
-
 
 export default PostCard;
