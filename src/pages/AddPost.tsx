@@ -8,13 +8,17 @@ import {
     IonHeader, IonInput,
     IonPage, IonTextarea,
     IonTitle,
-    IonToolbar
+    IonToolbar,
+    IonProgressBar,
+    IonLabel, IonToast
 } from "@ionic/react";
 import {useCamera} from "@capacitor-community/react-hooks/camera";
 import {CameraResultType} from "@capacitor/core";
 import {auth, storage} from "../utils/nhost";
 import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
+import LoginCard from "../components/styled/LoginCard";
+import styled from "styled-components";
 
 const INSERT_POST = gql`
     mutation InsertPost($post: posts_insert_input!) {
@@ -26,6 +30,25 @@ const INSERT_POST = gql`
   }
 }
 `;
+// Formik
+const useImageUpload = () => {
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+    const startUploading = async ({base64string, filenameWithExtension}:{base64string:string, filenameWithExtension:string}) => {
+        try{
+            await storage.putString(`/public/${filenameWithExtension}`,
+                base64string, "data_url", null, (pe: ProgressEvent) => {
+                setUploadProgress((pe.loaded / pe.total) * 100);
+            });
+        } catch(e){
+            console.warn(e)
+        }
+    };
+    return{
+        uploadProgress,
+        startUploading
+    }
+};
+
 
 const AddPost = () => {
 
@@ -33,8 +56,10 @@ const AddPost = () => {
     const [insertPostMutation] = useMutation(INSERT_POST);
     const [title, setTitle] = useState<string>("")
     const [desc, setDesc] = useState<string>("")
+    const [ImageFilename, setImageFilename] = useState<string>("")
+    const {startUploading, uploadProgress} = useImageUpload();
+    const [submittedCheck, setsubmittedCheck] = useState<boolean>(false)
 
-    let ImageFilename = ""
 
     const triggerCamera = async () => {
         await getPhoto({
@@ -42,18 +67,18 @@ const AddPost = () => {
             allowEditing: false,
             quality: 20,
         });
+        setImageFilename(`${Date.now().toString()}.jpeg`)
     };
 
-    const uploadImage = async () => {
-        ImageFilename = `${Date.now().toString()}.jpeg`;
-        await storage.putString(`/public/${ImageFilename}`,
-            (photo?.dataUrl as string), "data_url",
-            null, (pe: ProgressEvent) => {
-                console.log(pe.loaded)
-            });
-    }
-
     const InsertPost = async () => {
+        if (photo?.dataUrl){
+            await startUploading({
+                base64string: photo.dataUrl,
+                filenameWithExtension: ImageFilename
+            })
+        } else {
+            alert("Please take a photo!")
+        }
         try {
             await insertPostMutation({
                 variables: {
@@ -66,32 +91,48 @@ const AddPost = () => {
                 }
             })
         } catch (e) {
-
+            console.warn(e)
         }
+        setsubmittedCheck(true)
     }
+
 
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle slot="end">Add post</IonTitle>
+                    <IonTitle>Add post</IonTitle>
                     <IonButtons slot="start">
-                        <IonBackButton/>
+                        <IonBackButton defaultHref="/home"/>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                <IonCard>
-                    <img alt="No photo" src={photo?.dataUrl}/>
-                    <IonInput placeholder="Title" onIonInput={(e: any) => {setTitle(e.target.value)}}/>
-                    <IonTextarea placeholder="Description" onIonInput={(e: any) => {setDesc(e.target.value)}}/>
-                    <IonButton onClick={triggerCamera}>Take picture</IonButton>
-                    <IonButton onClick={uploadImage}>Upload picture</IonButton>
-                    <IonButton onClick={InsertPost}>Send Post</IonButton>
-                </IonCard>
+                <IonProgressBar value={uploadProgress}/>
+                <LoginCard>
+                    <img src={photo?.dataUrl}/>
+                    <IonLabel>Title</IonLabel>
+                    <IonInput onIonInput={(e: any) => {setTitle(e.target.value)}}/>
+                    <IonLabel>Description</IonLabel>
+                    <IonTextareaStyled onIonInput={(e: any) => {setDesc(e.target.value)}}/>
+                    <IonButton onClick={triggerCamera}>Photo</IonButton>
+                    <IonButton onClick={InsertPost}>Submit</IonButton>
+
+                </LoginCard>
+                <IonToast
+                    isOpen={submittedCheck}
+                    onDidDismiss={() => setsubmittedCheck(false)}
+                    message="Post sumbitted"
+                    duration={2000}
+                    color="success"
+                />
             </IonContent>
         </IonPage>
     );
 }
+
+const IonTextareaStyled = styled(IonTextarea)`
+    height: 100px;
+`;
 
 export default AddPost;

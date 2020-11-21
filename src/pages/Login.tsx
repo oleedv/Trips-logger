@@ -53,16 +53,9 @@ const Login = () => {
 
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>
-                        Login
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
             <IonContentStyled>
                 <CenterContainer>
-                    <PageTitle>Trips app</PageTitle>
+                    <PageTitle>Trip logger</PageTitle>
                     <LoginCard>
                         <IonList>
                             <IonItem>
@@ -80,9 +73,6 @@ const Login = () => {
                             //if authing then show spinner if not show icon
                             isAuth ? <IonSpinner name="crescent"/> : <IonIcon icon={arrowForwardCircle}/>
                         }
-                    </LoginBtn>
-                    <LoginBtn onClick={() => history.replace("/addpost")}>
-                        Goto AddPost.tsx
                     </LoginBtn>
                 </CenterContainer>
                 <IonToast

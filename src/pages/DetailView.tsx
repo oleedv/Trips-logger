@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     IonCard,
     IonContent,
@@ -10,13 +10,16 @@ import {
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonBackButton
+    IonBackButton, IonFooter, IonInput, IonItemDivider, IonTextarea, IonButton
 } from "@ionic/react";
 import PostCard from "../components/PostCardx";
 import IPost from "../models/IPost";
 import {gql} from "@apollo/client/core";
-import {useQuery} from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import ICommentList from "../models/ICommentList";
+import LoginCard from "../components/styled/LoginCard";
+import styled from "styled-components";
+import {auth} from "../utils/nhost";
 
 const GET_COMMENTS = gql`
  query getCommentsByPostID($post_id: Int!) {
@@ -31,8 +34,20 @@ const GET_COMMENTS = gql`
 } 
 `;
 
-const DetailView = (props: any) => {
+const INSERT_COMMENT = gql`
+mutation InsertComment($comment: comments_insert_input!) {
+  insert_comments_one(object: $comment) {
+    text
+    user_id
+    post_id
+  }
+}
 
+`;
+
+const DetailView = (props: any) => {
+    const [insertCommentMutation] = useMutation(INSERT_COMMENT);
+    const [comment, setComment] = useState<string>("")
     const post: IPost = props.location?.state?.post;
 
     const {loading, data} = useQuery<ICommentList>(GET_COMMENTS, {
@@ -48,12 +63,29 @@ const DetailView = (props: any) => {
     if (loading) {
         return <IonLabel>Loading comments..</IonLabel>
     }
+
+    const InsertComment = async () => {
+      try {
+          await insertCommentMutation({
+              variables: {
+                  comment: {
+                    text: comment,
+                    user_id: auth.getClaim(`x-hasura-user-id`),
+                    post_id: post.id
+                  }
+              }
+          })
+          window.location.reload();
+      }  catch(e) {
+        console.warn(e)
+      }
+    };
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonButtons slot="primary">
-                        <IonBackButton/>
+                    <IonButtons slot="start">
+                        <IonBackButton defaultHref="/home"/>
                     </IonButtons>
                     <IonTitle>Detail view</IonTitle>
                 </IonToolbar>
@@ -74,7 +106,19 @@ const DetailView = (props: any) => {
                     </IonList>
                 </IonCard>
             </IonContent>
+            <IonFooter>
+                <IonItemStyled>
+                    <IonInput placeholder="Write comment..." onIonInput={(e: any) => {setComment(e.target.value)}}/>
+                    <IonButton onClick={InsertComment}>Submit</IonButton>
+                </IonItemStyled>
+            </IonFooter>
         </IonPage>
     )
 }
+
+const IonItemStyled = styled(IonItem)`
+    border: 1px solid grey;
+    // --background: none;
+    // background-color: grey;
+`;
 export default DetailView;

@@ -1,30 +1,45 @@
 import React from 'react';
-import {IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonFooter} from "@ionic/react";
+import {
+    IonAvatar,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle, IonChip, IonContent,
+    IonFooter, IonItem, IonNote
+} from "@ionic/react";
 import IPost from "../models/IPost";
+import styled from "styled-components";
 
 const PostCard = ({description, id, title, user, created_date, image_filename}: IPost) => {
     return (
         <IonCard>
-            <img alt="Placeholder"
-                 src={`https://backend-ytb9qog2.nhost.app/storage/o/public/${image_filename}`}/>
-            <IonCardHeader>
+                <IonChipStyled>
+                <IonAvatar>
+                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                </IonAvatar>
                 <IonCardSubtitle>
-                    @ {user.display_name} &bull; ? likes // todo likes!
+                    @ {user.display_name}
                 </IonCardSubtitle>
+                </IonChipStyled>
+            <img src={`https://backend-ytb9qog2.nhost.app/storage/o/public/${image_filename}`}/>
+            <IonCardContent>
+                    <IonCardSubtitle>
+                                Uploaded {created_date}
+                    </IonCardSubtitle>
                 <IonCardTitle>
                     {title}
                 </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-                {description}
+                <IonNote slot="end">{description}</IonNote>
             </IonCardContent>
-            <IonFooter>
-                <IonCardSubtitle>
-                   Uploaded at {created_date}
-                </IonCardSubtitle>
-            </IonFooter>
         </IonCard>
     )
 };
+
+const IonChipStyled = styled(IonChip)`
+    background-color: transparent;
+`;
+
+
 
 export default PostCard;
