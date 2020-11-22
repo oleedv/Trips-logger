@@ -12,7 +12,7 @@ import {
     IonToolbar,
     IonProgressBar,
     IonLabel,
-    IonToast, IonRange, IonItem
+    IonToast, IonRange, IonItem, IonIcon
 } from "@ionic/react";
 import {useCamera} from "@capacitor-community/react-hooks/camera";
 import {CameraResultType} from "@capacitor/core";
@@ -22,17 +22,10 @@ import {useMutation} from "@apollo/client";
 import LoginCard from "../components/styled/LoginCard";
 import styled from "styled-components";
 import {useHistory} from "react-router-dom";
+import INSERT_POST from "../queries/INSERT_POST";
+import {cameraOutline, logOutOutline} from "ionicons/icons";
+import IonButtonStyled from "../components/styled/IonButtonStyled";
 
-const INSERT_POST = gql`
-    mutation InsertPost($post: posts_insert_input!) {
-  insert_posts_one(object: $post){
-    title
-    user_id
-    description
-    image_filename
-  }
-}
-`;
 // Formik
 const useImageUpload = () => {
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -127,7 +120,9 @@ const NewTrip = () => {
 
                         <IonRange min={1} max={10} step={1} snaps={true} color="secondary" />
 
-                    <IonButton onClick={triggerCamera}>Photo</IonButton>
+                    <IonButtonStyled onClick={triggerCamera}>
+                        <IonIcon icon={cameraOutline}/>
+                    </IonButtonStyled>
                     <IonButton type="submit" onClick={InsertPost}>Publish</IonButton>
 
                 </LoginCard>

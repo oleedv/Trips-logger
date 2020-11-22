@@ -14,56 +14,15 @@ import {
 } from "@ionic/react";
 import PostCard from "../components/PostCardx";
 import IPost from "../models/IPost";
-import {gql} from "@apollo/client/core";
-import {useMutation, useQuery, useSubscription} from "@apollo/client";
+import {useMutation, useSubscription} from "@apollo/client";
 import ICommentList from "../models/ICommentList";
-import LoginCard from "../components/styled/LoginCard";
 import styled from "styled-components";
 import {auth} from "../utils/nhost";
-import IonChipStyled from "../components/styled/IonChipStyled";
 import {trashBinOutline} from "ionicons/icons";
 import {useHistory} from "react-router-dom";
-
-const GET_COMMENTS = gql`
- subscription getCommentsByPostID($post_id: Int!) {
-   posts_by_pk(id: $post_id) {
-     comments {
-       text
-       user {
-         display_name
-       }
-     }
-   }
-} 
-`;
-
-const INSERT_COMMENT = gql`
-mutation InsertComment($comment: comments_insert_input!) {
-  insert_comments_one(object: $comment) {
-    text
-    user_id
-    post_id
-  }
-}
-
-`;
-
-const DELETE_POST = gql`
-  mutation DeletePost($post_id: Int!) {
-    delete_comments (
-      where: {
-        post_id: {
-          _eq: $post_id
-        }
-      }
-    ) {
-      affected_rows
-    }
-    delete_posts_by_pk (
-      id: $post_id
-    ) { id }
-  }
-`;
+import INSERT_COMMENT from "../queries/INSERT_COMMENT";
+import DELETE_POST from "../queries/DELETE_POST";
+import GET_COMMENTS from "../queries/GET_COMMENTS";
 
 const DetailView = (props: any) => {
     let history = useHistory();

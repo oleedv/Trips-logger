@@ -4,7 +4,7 @@ import {
     IonCard,
     IonCardContent,
     IonCardSubtitle,
-    IonCardTitle,
+    IonCardTitle, IonHeader,
     IonNote
 } from "@ionic/react";
 import IPost from "../models/IPost";
@@ -15,16 +15,18 @@ import IonCardStyled from "./styled/IonCardStyled";
 const PostCard = ({description, title, user, created_date, image_filename}: IPost) => {
     return (
         <IonCardStyled>
-            <Link style={{textDecoration: "none"}} to={{pathname: `/profile`}}>
-                <IonChipStyled>
-                <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                </IonAvatar>
-                <IonCardSubtitle>
-                    @ {user.display_name}
-                </IonCardSubtitle>
-                </IonChipStyled>
-                </Link>
+            <IonHeader>
+                {
+                    <IonChipStyled>
+                        <IonAvatar>
+                            <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                        </IonAvatar>
+                        <IonCardSubtitle>
+                            @ {user.display_name}
+                        </IonCardSubtitle>
+                    </IonChipStyled>
+                }
+            </IonHeader>
             <img src={`https://backend-ytb9qog2.nhost.app/storage/o/public/${image_filename}`}/>
             <IonCardContent>
                     <IonCardSubtitle>

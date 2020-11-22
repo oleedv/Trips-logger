@@ -12,26 +12,14 @@ import {
 import React from 'react';
 import {Link, useHistory} from "react-router-dom";
 import PostCard from "../components/PostCardx";
-import {gql} from "@apollo/client/core";
-import {useQuery, useSubscription} from "@apollo/client";
+import {useSubscription} from "@apollo/client";
 import IPostList from "../models/IPostList";
-import {exitOutline} from "ionicons/icons";
+import {addCircleOutline, logOutOutline, personOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
-import Menu from "../components/Menu";
 import styled from "styled-components";
+import GET_POSTS from "../queries/GET_POST";
+import IonButtonStyled from '../components/styled/IonButtonStyled';
 
-const GET_POSTS = gql`
-subscription {
-  posts {
-    id
-    title
-    description
-    image_filename
-    created_date
-    user {id display_name}
-  }
-}
-`;
 
 
 const Feed = () => {
@@ -40,9 +28,9 @@ const Feed = () => {
     if (loading) {
         return <IonLabel>Loading..</IonLabel>
     }
-    if (data) {
-        console.log(data)
-    }
+    // if (data) {
+    //     console.log(data)
+    // }
 
     const logout = async () => {
          try {
@@ -57,13 +45,18 @@ const Feed = () => {
         <IonPageStyled>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Trips app</IonTitle>
-                    <IonButtons slot="start" onClick={logout}>
-                        <IonIcon icon={exitOutline}/>
+                    <IonButtons>
+                        <IonButtonStyled slot="start" onClick={logout}>
+                            <IonIcon icon={logOutOutline}/>
+                        </IonButtonStyled>
                     </IonButtons>
+                    <IonTitle>Trips app</IonTitle>
                     <IonButtons slot="end">
+                        <IonButtonStyled>
+                            <IonIcon icon={personOutline}/>
+                        </IonButtonStyled>
                         <IonButton routerLink="/newtrip">
-                            Add trip
+                            <IonIcon icon={addCircleOutline}/>
                         </IonButton>
                     </IonButtons>
                 </IonToolbar>

@@ -67,18 +67,20 @@ const Login = () => {
                     <IonTitle>Login</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContentStyled fullscreen>
+            <IonContentStyled scrollY={false}>
                 <CenterContainer>
                     <PageTitle>Trip logger</PageTitle>
                     <LoginCard>
                         <IonListStyled>
                             <IonItemStyled>
-                                <IonInput placeholder="Epostadresse"
-                                          onIonInput={(e: any) => setEmailAddress(e.target.value)}/>
+                                <IonInput placeholder="Email"
+                                          onIonInput={(e: any) => setEmailAddress(e.target.value)}
+                                value="test@test.com"/>
                             </IonItemStyled>
                             <IonItemStyled>
-                                <IonInput placeholder="Passord" type="password"
-                                          onIonInput={(e: any) => setPassword(e.target.value)}/>
+                                <IonInput placeholder="Password" type="password"
+                                          onIonInput={(e: any) => setPassword(e.target.value)}
+                                value="123"/>
                             </IonItemStyled>
                         </IonListStyled>
                         <LoginBtn onClick={authUser}>

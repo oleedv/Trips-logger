@@ -9,7 +9,6 @@ import Login from "./pages/Login";
 import {NhostAuthProvider} from "@nhost/react-auth";
 import {auth} from "./utils/nhost";
 import NewTrip from "./pages/NewTrip";
-import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Signup from "./pages/Signup";
 
@@ -39,7 +38,6 @@ const App: React.FC = () => (
             <IonApp>
                 <IonReactRouter>
                     <IonRouterOutlet>
-                        <ProtectedRoute path="/profile" component={Profile} exact={true}/>
                         <ProtectedRoute path="/newtrip" component={NewTrip} exact={true}/>
                         <ProtectedRoute path="/feed" component={Feed} exact={true}/>
                         <ProtectedRoute path="/detailView/:id" component={detailView} exact={true}/>
