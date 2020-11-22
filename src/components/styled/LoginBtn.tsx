@@ -4,7 +4,10 @@ import {IonFabButton} from "@ionic/react";
 
 const LoginBtn = styled(IonFabButton)`
     --background: #2A3C24;
-   align-self: center;
+     margin: auto;
+     margin-top: 30px;
+     align-self: center;
+     
 `;
 
 export default LoginBtn;

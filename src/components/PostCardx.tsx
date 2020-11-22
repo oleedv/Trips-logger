@@ -10,10 +10,11 @@ import {
 import IPost from "../models/IPost";
 import IonChipStyled from "./styled/IonChipStyled";
 import {Link} from "react-router-dom";
+import IonCardStyled from "./styled/IonCardStyled";
 
 const PostCard = ({description, title, user, created_date, image_filename}: IPost) => {
     return (
-        <IonCard>
+        <IonCardStyled>
             <Link style={{textDecoration: "none"}} to={{pathname: `/profile`}}>
                 <IonChipStyled>
                 <IonAvatar>
@@ -34,7 +35,7 @@ const PostCard = ({description, title, user, created_date, image_filename}: IPos
                 </IonCardTitle>
                 <IonNote slot="end">{description}</IonNote>
             </IonCardContent>
-        </IonCard>
+        </IonCardStyled>
     )
 };
 

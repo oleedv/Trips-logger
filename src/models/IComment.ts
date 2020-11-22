@@ -1,10 +1,9 @@
 interface IComment {
     user: {
-        display_name: String
-
+        display_name: string
     },
-    text: String,
-    date: String,
+    text: string,
+    date: string,
     profileImageURL?: any;
 }
 

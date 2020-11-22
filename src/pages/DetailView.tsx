@@ -10,20 +10,22 @@ import {
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonBackButton, IonFooter, IonInput, IonItemDivider, IonTextarea, IonButton, IonAvatar
+    IonBackButton, IonFooter, IonInput, IonItemDivider, IonTextarea, IonButton, IonAvatar, IonIcon
 } from "@ionic/react";
 import PostCard from "../components/PostCardx";
 import IPost from "../models/IPost";
 import {gql} from "@apollo/client/core";
-import {useMutation, useQuery} from "@apollo/client";
+import {useMutation, useQuery, useSubscription} from "@apollo/client";
 import ICommentList from "../models/ICommentList";
 import LoginCard from "../components/styled/LoginCard";
 import styled from "styled-components";
 import {auth} from "../utils/nhost";
 import IonChipStyled from "../components/styled/IonChipStyled";
+import {trashBinOutline} from "ionicons/icons";
+import {useHistory} from "react-router-dom";
 
 const GET_COMMENTS = gql`
- query getCommentsByPostID($post_id: Int!) {
+ subscription getCommentsByPostID($post_id: Int!) {
    posts_by_pk(id: $post_id) {
      comments {
        text
@@ -46,12 +48,31 @@ mutation InsertComment($comment: comments_insert_input!) {
 
 `;
 
+const DELETE_POST = gql`
+  mutation DeletePost($post_id: Int!) {
+    delete_comments (
+      where: {
+        post_id: {
+          _eq: $post_id
+        }
+      }
+    ) {
+      affected_rows
+    }
+    delete_posts_by_pk (
+      id: $post_id
+    ) { id }
+  }
+`;
+
 const DetailView = (props: any) => {
+    let history = useHistory();
     const [insertCommentMutation] = useMutation(INSERT_COMMENT);
     const [comment, setComment] = useState<string>("")
     const post: IPost = props.location?.state?.post;
+    const [deletePostMutation] = useMutation(DELETE_POST);
 
-    const {loading, data} = useQuery<ICommentList>(GET_COMMENTS, {
+    const {loading, data} = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
             post_id: post?.id
         },
@@ -59,7 +80,7 @@ const DetailView = (props: any) => {
     });
 
     if (!post) {
-        return <div>Error: No post! (DetailView.tsx: 35)</div>;
+        return <div>Error: No post! (DetailView.tsx: 60)</div>;
     }
     if (loading) {
         return <IonLabel>Loading comments..</IonLabel>
@@ -76,11 +97,24 @@ const DetailView = (props: any) => {
                   }
               }
           })
-          window.location.reload();
       }  catch(e) {
         console.warn(e)
       }
     };
+
+    const deletePost = async () => {
+        try {
+            await deletePostMutation({
+                variables: {
+                    post_id: post.id
+                }
+            });
+            history.replace("/feed")
+        } catch (e) {
+            console.warn(e);
+        }
+    };
+
     return (
         <IonPage>
             <IonHeader>
@@ -89,6 +123,14 @@ const DetailView = (props: any) => {
                         <IonBackButton defaultHref="/feed"/>
                     </IonButtons>
                     <IonTitle>Detail view</IonTitle>
+                    {
+                        post.user.id === auth.getClaim('x-hasura-user-id') &&
+                        <IonButtons slot="end">
+                            <IonButton onClick={deletePost}>
+                                <IonIcon color="danger" icon={trashBinOutline} />
+                            </IonButton>
+                        </IonButtons>
+                    }
                 </IonToolbar>
             </IonHeader>
             <IonContent>

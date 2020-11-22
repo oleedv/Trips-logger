@@ -7,27 +7,28 @@ import {
     IonButton,
     IonButtons,
     IonLabel,
-    IonIcon
+    IonIcon, IonCard
 } from '@ionic/react';
 import React from 'react';
 import {Link, useHistory} from "react-router-dom";
 import PostCard from "../components/PostCardx";
 import {gql} from "@apollo/client/core";
-import {useQuery} from "@apollo/client";
+import {useQuery, useSubscription} from "@apollo/client";
 import IPostList from "../models/IPostList";
 import {exitOutline} from "ionicons/icons";
 import {auth} from "../utils/nhost";
 import Menu from "../components/Menu";
+import styled from "styled-components";
 
 const GET_POSTS = gql`
-query {
+subscription {
   posts {
     id
     title
     description
     image_filename
     created_date
-    user {display_name}
+    user {id display_name}
   }
 }
 `;
@@ -35,7 +36,7 @@ query {
 
 const Feed = () => {
     let history = useHistory();
-    const {loading, data} = useQuery<IPostList>(GET_POSTS);
+    const {loading, data} = useSubscription<IPostList>(GET_POSTS);
     if (loading) {
         return <IonLabel>Loading..</IonLabel>
     }
@@ -52,18 +53,12 @@ const Feed = () => {
          }
     };
 
-
     return (
-
-
-
-        <IonPage>
+        <IonPageStyled>
             <IonHeader>
                 <IonToolbar>
-                    <Menu/>
-
-                    <IonTitle slot="primary">Trips app</IonTitle>
-                    <IonButtons onClick={logout}>
+                    <IonTitle>Trips app</IonTitle>
+                    <IonButtons slot="start" onClick={logout}>
                         <IonIcon icon={exitOutline}/>
                     </IonButtons>
                     <IonButtons slot="end">
@@ -85,8 +80,11 @@ const Feed = () => {
                     ))
                 }
             </IonContent>
-        </IonPage>
+        </IonPageStyled>
     );
 };
+const IonPageStyled = styled(IonPage)`
+    --ion-background-color:#111D12;
+`;
 
 export default Feed;

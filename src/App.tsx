@@ -9,6 +9,9 @@ import Login from "./pages/Login";
 import {NhostAuthProvider} from "@nhost/react-auth";
 import {auth} from "./utils/nhost";
 import NewTrip from "./pages/NewTrip";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Signup from "./pages/Signup";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -28,7 +31,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Profile from "./pages/Profile";
 
 
 const App: React.FC = () => (
@@ -37,11 +39,12 @@ const App: React.FC = () => (
             <IonApp>
                 <IonReactRouter>
                     <IonRouterOutlet>
-                        <Route path="/profile" component={Profile} exact={true}/>
-                        <Route path="/newtrip" component={NewTrip} exact={true}/>
+                        <ProtectedRoute path="/profile" component={Profile} exact={true}/>
+                        <ProtectedRoute path="/newtrip" component={NewTrip} exact={true}/>
+                        <ProtectedRoute path="/feed" component={Feed} exact={true}/>
+                        <ProtectedRoute path="/detailView/:id" component={detailView} exact={true}/>
+                        <Route path="/signup" component={Signup} exact={true}/>
                         <Route path="/login" component={Login} exact={true}/>
-                        <Route path="/feed" component={Feed} exact={true}/>
-                        <Route path="/detailView/:id" component={detailView} exact={true}/>
                         <Route exact path="/" render={() => <Redirect to="/login"/>}/>
                     </IonRouterOutlet>
                 </IonReactRouter>

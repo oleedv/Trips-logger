@@ -12,7 +12,7 @@ import {
     IonToolbar,
     IonProgressBar,
     IonLabel,
-    IonToast
+    IonToast, IonRange, IonItem
 } from "@ionic/react";
 import {useCamera} from "@capacitor-community/react-hooks/camera";
 import {CameraResultType} from "@capacitor/core";
@@ -21,6 +21,7 @@ import gql from "graphql-tag";
 import {useMutation} from "@apollo/client";
 import LoginCard from "../components/styled/LoginCard";
 import styled from "styled-components";
+import {useHistory} from "react-router-dom";
 
 const INSERT_POST = gql`
     mutation InsertPost($post: posts_insert_input!) {
@@ -53,6 +54,7 @@ const useImageUpload = () => {
 
 
 const NewTrip = () => {
+    let history = useHistory();
     const {photo, getPhoto} = useCamera();
     const [insertPostMutation] = useMutation(INSERT_POST);
     const [title, setTitle] = useState<string>("")
@@ -96,13 +98,14 @@ const NewTrip = () => {
         }
         //after everything is sent
         setsubmittedCheck(true)
+        history.replace("/feed")
     }
 
-    if(submittedCheck) {
-        window.location.href="/feed"
-        //history.replace wouldnt work, had to use JS method, does cut the toast. todo fix
-    }
 
+    const ratingCounter = () => {
+      let counter = 1;
+
+    };
     return (
         <IonPage>
             <IonHeader>
@@ -121,8 +124,11 @@ const NewTrip = () => {
                     <IonInput onIonInput={(e: any) => {setTitle(e.target.value)}}/>
                     <IonLabel>Description</IonLabel>
                     <IonTextareaStyled onIonInput={(e: any) => {setDesc(e.target.value)}}/>
+
+                        <IonRange min={1} max={10} step={1} snaps={true} color="secondary" />
+
                     <IonButton onClick={triggerCamera}>Photo</IonButton>
-                    <IonButton type="submit" onClick={InsertPost}>Submit</IonButton>
+                    <IonButton type="submit" onClick={InsertPost}>Publish</IonButton>
 
                 </LoginCard>
                 <IonToast
@@ -139,6 +145,9 @@ const NewTrip = () => {
 
 const IonTextareaStyled = styled(IonTextarea)`
     height: 100px;
+`;
+const IonItemStyled = styled(IonItem)`
+    --background: none;
 `;
 
 export default NewTrip;

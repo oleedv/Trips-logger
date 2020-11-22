@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {IonCard} from "@ionic/react";
 
 const LoginCard = styled(IonCard)`
-    padding: 10px;
+    padding: 20px;
     
 `;
 
